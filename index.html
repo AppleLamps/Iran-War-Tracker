@@ -28,10 +28,18 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
+        }
+        
+        /* Emoji support */
+        .emoji {
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
         }
         
         /* Header */
@@ -515,9 +523,9 @@
         <!-- Force Comparison -->
         <div class="grid grid-2">
             <div class="card">
-                <h2>🇺🇸 Coalition Forces</h2>
+                <h2><span class="emoji" style="font-size: 1.5rem;">🇺🇸</span> Coalition Forces</h2>
                 <div class="force-card force-coalition">
-                    <h3>🇺🇸 United States</h3>
+                    <h3><span class="emoji" style="font-size: 1.25rem;">🇺🇸</span> United States</h3>
                     <ul>
                         <li>2 aircraft carriers (USS Abraham Lincoln, USS Carl Vinson)</li>
                         <li>200+ combat aircraft deployed</li>
@@ -528,7 +536,7 @@
                     </ul>
                 </div>
                 <div class="force-card force-coalition">
-                    <h3>🇮🇱 Israel</h3>
+                    <h3><span class="emoji" style="font-size: 1.25rem;">🇮🇱</span> Israel</h3>
                     <ul>
                         <li>IDF Air Force (Operation Roaring Lion)</li>
                         <li>Ground operations in Lebanon</li>
@@ -539,9 +547,9 @@
             </div>
             
             <div class="card">
-                <h2>🇮🇷 Iranian Forces</h2>
+                <h2><span class="emoji" style="font-size: 1.5rem;">🇮🇷</span> Iranian Forces</h2>
                 <div class="force-card force-iran">
-                    <h3>🇮🇷 IRGC & Artesh</h3>
+                    <h3><span class="emoji" style="font-size: 1.25rem;">🇮🇷</span> IRGC & Artesh</h3>
                     <ul>
                         <li>Navy: Driven from sea, 140+ vessels sunk</li>
                         <li>Air Force: No longer flying</li>
@@ -552,7 +560,7 @@
                     </ul>
                 </div>
                 <div class="force-card force-iran">
-                    <h3>🌐 Proxy Forces</h3>
+                    <h3><span class="emoji" style="font-size: 1.25rem;">🌍</span> Proxy Forces</h3>
                     <ul>
                         <li>Hezbollah (Lebanon) — 1,000+ killed</li>
                         <li>Houthis (Yemen) — 6 attacks since March 28</li>
