@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Epic Fury | Iran War Tracker</title>
+    <meta name="description" content="Real-time tracking of Operation Epic Fury. Day-by-day timeline, military assessments, and geopolitical analysis of the US-Iran conflict.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #dc2626;
+            --accent-light: #fee2e2;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --info: #3b82f6;
+            --coalition: #1e40af;
+            --iran: #dc2626;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .conflict-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .conflict-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        header h1 { 
+            font-size: 2.5rem; 
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            position: relative;
+            letter-spacing: -0.02em;
+        }
+        
+        header .subtitle {
+            font-size: 1.25rem;
+            font-weight: 600;
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        header .day-counter {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+            margin: 1rem 0;
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        header .day-label {
+            font-size: 0.875rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Stats */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 12px;
+        }
+        
+        .stat-item .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .stat-item .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Force Comparison */
+        .force-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .force-coalition {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid var(--coalition);
+        }
+        
+        .force-iran {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid var(--iran);
+        }
+        
+        .force-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .force-coalition h3 { color: var(--coalition); }
+        .force-iran h3 { color: var(--iran); }
+        
+        .force-card ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            font-size: 0.9375rem;
+            color: var(--text);
+        }
+        
+        .force-card li {
+            margin-bottom: 0.375rem;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--border) 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.25rem;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-left: -4px;
+            box-shadow: 0 0 0 4px var(--accent-light);
+        }
+        
+        .timeline-item:last-child { padding-bottom: 0; }
+        
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-content {
+            color: var(--text);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+        
+        .timeline-content strong {
+            color: var(--primary);
+        }
+        
+        /* Status Indicators */
+        .status-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.875rem 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+        }
+        
+        .status-label {
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .status-destroyed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-degraded {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem;
+            margin: 1.25rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .info-box h3 {
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .info-box p {
+            color: #1e40af;
+            font-size: 0.9375rem;
+            opacity: 0.9;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .warning-box h3 { color: #92400e; }
+        .warning-box p { color: #92400e; }
+        
+        .danger-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #dc2626;
+        }
+        
+        .danger-box h3 { color: #991b1b; }
+        .danger-box p { color: #991b1b; }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 0.5rem;
+            font-size: 0.9375rem;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 0.875rem 1rem;
+            text-align: left;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: #f8fafc;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .data-table th:first-child { border-radius: 8px 0 0 0; }
+        .data-table th:last-child { border-radius: 0 8px 0 0; }
+        
+        .data-table td {
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+        
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+        .data-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+        
+        .data-table tr:hover td {
+            background: #f8fafc;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .footer .timestamp {
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.875rem; }
+            header .day-counter { font-size: 3rem; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .data-table { font-size: 0.875rem; }
+            .data-table th, .data-table td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="conflict-badge">Active Conflict</div>
+        <h1>Operation Epic Fury</h1>
+        <p class="subtitle">US-Iran War Tracker</p>
+        <div class="day-counter">Day 37</div>
+        <p class="day-label">As of April 5, 2026</p>
+    </header>
+    
+    <div class="container">
+        <!-- Key Stats -->
+        <div class="grid grid-4">
+            <div class="card">
+                <div class="stat-item">
+                    <span class="value">50K+</span>
+                    <span class="label">US Troops Deployed</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="stat-item">
+                    <span class="value">140+</span>
+                    <span class="label">Iranian Ships Sunk</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="stat-item">
+                    <span class="value">86%</span>
+                    <span class="label">Iran Missile Degradation</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="stat-item">
+                    <span class="value">95%</span>
+                    <span class="label">Strait Traffic Drop</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Force Comparison -->
+        <div class="grid grid-2">
+            <div class="card">
+                <h2>🇺🇸 Coalition Forces</h2>
+                <div class="force-card force-coalition">
+                    <h3>🇺🇸 United States</h3>
+                    <ul>
+                        <li>2 aircraft carriers (USS Abraham Lincoln, USS Carl Vinson)</li>
+                        <li>200+ combat aircraft deployed</li>
+                        <li>82nd Airborne Division</li>
+                        <li>Marine Expeditionary Units</li>
+                        <li>B-2 Spirit stealth bombers (Diego Garcia)</li>
+                        <li>US submarines (first kill since 1945)</li>
+                    </ul>
+                </div>
+                <div class="force-card force-coalition">
+                    <h3>🇮🇱 Israel</h3>
+                    <ul>
+                        <li>IDF Air Force (Operation Roaring Lion)</li>
+                        <li>Ground operations in Lebanon</li>
+                        <li>Multiple divisions engaged</li>
+                        <li>1,000+ Hezbollah operatives killed</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>🇮🇷 Iranian Forces</h2>
+                <div class="force-card force-iran">
+                    <h3>🇮🇷 IRGC & Artesh</h3>
+                    <ul>
+                        <li>Navy: Driven from sea, 140+ vessels sunk</li>
+                        <li>Air Force: No longer flying</li>
+                        <li>Ballistic missiles: 86% degraded</li>
+                        <li>Air defense: No longer shooting</li>
+                        <li>Supply shortages, rising desertions</li>
+                        <li>Artesh-IRGC friction increasing</li>
+                    </ul>
+                </div>
+                <div class="force-card force-iran">
+                    <h3>🌐 Proxy Forces</h3>
+                    <ul>
+                        <li>Hezbollah (Lebanon) — 1,000+ killed</li>
+                        <li>Houthis (Yemen) — 6 attacks since March 28</li>
+                        <li>Iraqi PMF militias — Active in Basra</li>
+                        <li>Kurdish-Iranian militias (opposition)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Military Status -->
+        <div class="card">
+            <h2>⚔️ Military Assessment</h2>
+            <div class="grid grid-2">
+                <div>
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--coalition);">Coalition Objectives</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">Ballistic Missile Capacity</span>
+                            <span class="status-badge status-degraded">86% Degraded</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Iranian Navy</span>
+                            <span class="status-badge status-destroyed">Destroyed</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Air Defense Network</span>
+                            <span class="status-badge status-destroyed">Neutralized</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Drone Manufacturing</span>
+                            <span class="status-badge status-degraded">Severely Damaged</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--iran);">Iranian Capabilities</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">Air Force Status</span>
+                            <span class="status-badge status-destroyed">Non-Operational</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Naval Operations</span>
+                            <span class="status-badge status-destroyed">Ceased</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Missile Salvos</span>
+                            <span class="status-badge status-critical">Onesies & Twosies</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Ground Forces</span>
+                            <span class="status-badge status-degraded">Supply Shortages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3>💡 CENTCOM Assessment (Day 23)</h3>
+                <p>"The Iranian Navy is no longer at sea, the Iranian Air Force is no longer flying, air defense is no longer shooting." — Admiral Brad Cooper, CENTCOM Commander. The combined force is "on plan or ahead" for all principal military objectives.</p>
+            </div>
+        </div>
+        
+        <!-- Strait of Hormuz -->
+        <div class="card">
+            <h2>🛢️ Strait of Hormuz Crisis</h2>
+            <div class="danger-box">
+                <h3>⚠️ Critical Situation</h3>
+                <p>Iran declared the Strait "effectively closed for the duration of the war." 20% of global oil trade transits the Strait. Daily traffic dropped ~95%. Over 150 tankers anchored in open Gulf waters. Only Chinese and Iranian vessels continue transiting.</p>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Global Oil Trade Affected</td>
+                        <td>20%</td>
+                    </tr>
+                    <tr>
+                        <td>Traffic Reduction</td>
+                        <td>~95%</td>
+                    </tr>
+                    <tr>
+                        <td>Tankers Anchored</td>
+                        <td>150+</td>
+                    </tr>
+                    <tr>
+                        <td>Iranian Position</td>
+                        <td>Will not grant US access even after war</td>
+                    </tr>
+                    <tr>
+                        <td>US Position</td>
+                        <td>No ceasefire until Strait is "open, free, and clear"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Political Situation -->
+        <div class="grid grid-2">
+            <div class="card">
+                <h2>👑 Iranian Leadership</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">Feb 28 — Day 1</div>
+                        <div class="timeline-content">
+                            <strong>Ali Khamenei killed</strong> in opening strikes on Tehran. Wife also killed. Mohammad Shirazi (Supreme Leader Office Military Chief) confirmed dead.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 8-9 — Days 8-10</div>
+                        <div class="timeline-content">
+                            <strong>Mojtaba Khamenei selected</strong> as third Supreme Leader. First dynastic succession in Islamic Republic history. IRGC forced it through. Trump warned he was "unacceptable."
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 17 — Day 17</div>
+                        <div class="timeline-content">
+                            <strong>Ali Larijani killed</strong> in IDF strike. Had been "effectively running the country" and lobbying for a more moderate choice. Death weakened pragmatist faction.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Current — Day 37</div>
+                        <div class="timeline-content">
+                            <strong>Mojtaba wounded</strong> (leg injuries), never appeared publicly. IRGC military council assumed control. President Pezeshkian in "complete political deadlock."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>🌍 Diplomatic Track</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 23 — Day 23</div>
+                        <div class="timeline-content">
+                            <strong>Trump declares war "won"</strong> and claims Iran agreed "never" to have nuclear weapon. Iran denies formal talks. Oil prices drop 6.5% on claims.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 24-26 — Days 24-26</div>
+                        <div class="timeline-content">
+                            <strong>US submits 15-point ceasefire plan</strong> via Pakistan. Israel "taken by surprise." Iran rejects as "extremely maximalist," submits counterproposal.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Current — Day 37</div>
+                        <div class="timeline-content">
+                            <strong>Stalemate continues.</strong> Iran demands: war damage compensation, permanent end to conflict, US recognition of Hormuz rights. No direct negotiations.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <h3>⚠️ China Resupply</h3>
+                    <p>China actively resupplying Iran's missile program. 5 shipments of sodium perchlorate (missile propellant precursor) arrived from China on IRISL vessels. Threatens to undermine coalition degradation campaign.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Losses -->
+        <div class="card">
+            <h2>✈️ Recent Aircraft Losses</h2>
+            <div class="danger-box">
+                <h3>⚠️ First US Aircraft Losses (April 3 — Day 36)</h3>
+                <p>Iranian forces shot down a US F-15E and an A-10. ISW assesses this does not indicate loss of air superiority. Combined force continues persistent strikes nationwide.</p>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Aircraft</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>F-15E Strike Eagle</td>
+                        <td>Multirole Fighter</td>
+                        <td>Shot Down (April 3)</td>
+                    </tr>
+                    <tr>
+                        <td>A-10 Thunderbolt II</td>
+                        <td>Ground Attack</td>
+                        <td>Shot Down (April 3)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- War Timeline -->
+        <div class="card">
+            <h2>📅 Conflict Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">February 2026 — Pre-War</div>
+                    <div class="timeline-content">
+                        Failed nuclear negotiations. US demands: zero enrichment, missile limits, end proxy support. Iran rejects all. Trump gives February deadline. Iran conducts naval exercises in Hormuz. Joint Iranian-Russian naval exercise (Feb 19). Anti-regime protests continue despite 30,000 killed in January crackdown.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">February 28 — Day 1</div>
+                    <div class="timeline-content">
+                        <strong>Operation Epic Fury / Operation Roaring Lion launched.</strong> US-Israeli combined force strikes ballistic missile infrastructure, air defenses, naval bases, leadership targets. Khamenei killed. ~200 ballistic missile launchers destroyed (half of total inventory). Iran retaliates with massive salvos. Hezbollah opens second front (March 2).
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 1-5 — Days 2-5</div>
+                    <div class="timeline-content">
+                        Air superiority established. 20+ Iranian naval vessels destroyed. 2,000+ targets struck. Iranian Air Force stops flying. Navy driven from sea. B-2s strike hardened underground sites. US submarine sinks Iranian combatant (first since 1945). Iran declares Hormuz closed. Senate rejects Kaine-Paul war powers resolution 47-53.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 8-25 — Days 8-25</div>
+                    <div class="timeline-content">
+                        Mojtaba becomes Supreme Leader (Mar 8-9). Kurdish-Iranian militias launch ground offensive from Iraqi Kurdistan. IDF expands strikes to Basij checkpoints, sports stadiums, South Pars gas field. Iran targets Saudi oil infrastructure (32 drones, 1 missile — all intercepted). $200 billion supplemental budget request. Netanyahu signals possible ground component.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 28 — Day 28</div>
+                    <div class="timeline-content">
+                        <strong>Houthis enter conflict.</strong> Attack Israel 6 times since March 28, including ballistic missiles with cluster munition warheads. Claim coordination with Hezbollah and Iran.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">April 3-5 — Days 36-37</div>
+                    <div class="timeline-content">
+                        First US aircraft losses (F-15E, A-10). China resupplying Iran's missile program. Iranian-backed Iraqi militias strike BP's North Rumaila oilfield. Hezbollah maintains attacks. No ceasefire in sight.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Last Updated: <span class="timestamp">April 5, 2026 — Day 37</span></p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">Data compiled from CENTCOM, IDF, ISW, NYT, AP, and open source intelligence</p>
+        </div>
+    </div>
+</body>
+</html>
